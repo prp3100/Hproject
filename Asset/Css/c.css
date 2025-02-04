@@ -1,0 +1,142 @@
+body {
+    font-family: sans-serif;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* ปรับให้เต็มหน้าจอ */
+    text-align: center; /* จัดข้อความให้ตรงกลาง */
+}
+
+.countdown,
+#questionContainer {
+    display: none;
+}
+
+#questionContainer {
+    width: 800px; /* ขยายความกว้าง */
+    height: 400px; /* ขยายความสูง */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 28px; /* ขยายขนาดข้อความ */
+    background-color: #2a2a2a; /* ทำให้เด่นขึ้น */
+}
+
+.header {
+    background-color: #136b2a;
+    padding: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 20px;
+    width: 80%; /* ขยายขนาดให้เหมาะสม */
+}
+
+.content {
+    padding: 20px;
+    font-size: 18px;
+    width: 80%; /* ขยายขนาดให้เหมาะสม */
+}
+
+.start-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.start-button:hover {
+    background-color: #0056b3;
+}
+
+.start-button:active {
+    background-color: #004080;
+}
+
+.countdown {
+    font-size: 48px;
+    margin-top: 100px;
+}
+
+.question-text {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.answer {
+    font-size: 20px;
+    color: gold;
+    display: none;
+    margin-top: 120px;
+}
+
+.choices {
+    display: none;
+}
+
+.choice {
+    display: block;
+    font-size: 18px;
+    padding: 10px;
+    background: gold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px auto;
+    width: 200px;
+    
+}
+
+.choice:hover {
+    background: orange;
+}
+
+.popup {
+    display: none; /* ซ่อน pop-up โดยเริ่มต้น */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+}
+
+.popup-content {
+    color: white;
+}
+
+.restart-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.restart-button:hover {
+    background-color: #218838;
+}

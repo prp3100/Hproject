@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page with Quiz</title>
+    <style>
+        /* Basic styles for the entire page */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1c1c1c;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Styles for the login container */
+        .login-container {
+            display: flex;
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Circular image container */
+        .circle {
+            width: 200px;
+            height: 200px;
+            background-color: #7f00ff;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+        }
+
+        /* Ensures the image fits within the circle */
+        .circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Styles for the login form */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .login-form h1 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .login-form input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .login-form button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffd700;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-form button:hover {
+            background-color: #ffc107;
+        }
+
+        /* Styles for hint buttons */
+        .hint-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .hint-button {
+            padding: 10px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .hint-button:hover {
+            background-color: #ddd;
+        }
+
+        /* Styles for the hint box popup */
+        .hint-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #444;
+            padding: 30px;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .hint-box p {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 15px;
+            word-wrap: break-word;
+        }
+
+        .hint-box a {
+            color: #00bfff;
+            text-decoration: none;
+        }
+
+        .hint-box a:hover {
+            text-decoration: underline;
+        }
+
+        .hint-box button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .hint-box button:hover {
+            background-color: #ddd;
+        }
+
+        /* Popup styles for the quiz */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            z-index: 1000;
+        }
+
+        .popup img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .popup .question {
+            margin: 15px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .popup .timer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #f39c12;
+        }
+
+        .popup button {
+            padding: 10px 20px;
+            background-color: #1abc9c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .popup button:hover {
+            background-color: #16a085;
+        }
+
+        .popup input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hidden Hint 4 text box -->
+    <div id="hint-4" class="hint-box" style="display: none; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 999;">
+        <p>ยินดีด้วยคุณเจอ Secret Game! สนใจอยากลองเล่นไหม? (มีส่วนช่วยในการผ่านหน้า Login นะ)</p>
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="hint-button" onclick="closeHint4()">Close</button>
+            <button class="hint-button" onclick="goToSecretGame()">OK</button>
+        </div>
+    </div>    
+    <!-- Quiz popup for user interaction -->
+    <div class="popup" id="popup">
+        <img src="Asset/Image/pharaoh-emoji-emoticon-cartoon-egyptian-character-icon-62292130.jpg" alt="Clock Icon">
+        <div class="timer">
+            <span>⏰</span>
+            <span id="countdown">15</span>
+        </div>
+        <div class="question">ตอนเช้ามี 4 ขากลางวันมี 2 ขากลางคืนมี 3 ขา?</div>
+        <input type="text" id="answer" placeholder="คำตอบคือ?">
+        <button onclick="submitAnswer()">ตอบคำถาม</button>
+    </div>
+
+    <!-- Main login container -->
+    <div class="login-container">
+        <div class="circle">
+            <img src="Asset/Image/jojo2.webp" alt="Profile">
+        </div>
+        <div class="login-form">
+            <h1>LOGIN</h1>
+            <input type="password" id="username" value="nonam" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="validateLogin()">LOGIN</button>
+            <div class="hint-buttons">
+                <!-- Hint buttons for user assistance -->
+                <button class="hint-button" onclick="showHintBox('ชื่อเหรอทำไมต้องมีด้วยแค่ไร้ชื่อก็พอแบบภาษาอังริด')">Hint 1</button>
+                <button class="hint-button" onclick="showHintBox('ตัวช่วยสำคัญ <a href=\'https://r.mtdv.me/watch?v=link\'>https://r.mtdv.me/watch?v=link</a>')">Hint 2</button>
+                <button class="hint-button" onclick="showHintBox('password ลองดูที่รูปภาพและลองหาทางทุกวิธีดูในนั้นมันมีคำตอบ')">Hint 3</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden hint box displayed when a hint is clicked -->
+    <div class="hint-box" id="hint-box">
+        <p id="hint-text">Hint text</p>
+        <button class="hint-button" onclick="closeHintBox()">Close</button>
+    </div>
+
+    <button id="music-toggle" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">🔊 Play Music</button>
+<audio id="bg-music" loop>
+    <source src="Asset/Sound/Elevator Music Kevin MacLeod  Gaming Background Music HD.mp3" type="audio/mpeg">
+</audio>
+
+    <script>
+        // Timer variables
+        let countdown = 15;
+        let timer;
+        const countdownElement = document.getElementById("countdown");
+        const popup = document.getElementById("popup");
+        const answerInput = document.getElementById("answer");
+
+        // Start the countdown timer
+        function startCountdown() {
+            timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    refreshPage();
+                }
+            }, 1000);
+        }
+
+        // Refresh the page when time is up
+        function refreshPage() {
+            alert("หมดเวลา! หน้าเว็บจะรีเฟรชใหม่");
+            location.reload();
+        }
+        function submitAnswer() {
+    const answer = answerInput.value.trim();
+    if (answer === "มนุษย์") {
+        // สั่งให้เพลงพื้นหลังเริ่มเล่น
+        const bgMusic = document.getElementById("bg-music");
+        if (bgMusic) {
+            bgMusic.play();
+        }
+        alert("ตอบถูกต้อง! เพลงกำลังเริ่มเล่น และข้อความ 'ตัวช่วยสำคัญ' จะเปลี่ยนเป็นลิงก์");
+        clearInterval(timer); // หยุดตัวจับเวลา
+        popup.style.display = "none";
+        // เปลี่ยนข้อความ "ตัวช่วยสำคัญ" ให้กลายเป็นลิงก์
+        const helperLink = document.getElementById("helper-link");
+        if (helperLink) {
+            helperLink.innerHTML = '<a href="https://r.mtdv.me/watch?v=link" target="_blank">ตัวช่วยสำคัญ</a>';
+            helperLink.style.display = "block";
+        }
+    } else {
+        alert("คำตอบผิด! หน้าเว็บจะรีเฟรชใหม่");
+        location.reload();
+    }
+}
+
+
+        // Validate the login credentials
+        function validateLogin() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (username === "noname" && password === "Congratulation") {
+                alert("ล็อกอินสำเร็จ!");
+                window.open("congratulations.html", "_blank"); // Open the new page
+            } else {
+                alert("ผิดจ้ะอิอิ");
+            }
+        }
+
+        // Show the hint box with a specific hint
+        function showHintBox(hint) {
+            const hintBox = document.getElementById('hint-box');
+            const hintText = document.getElementById('hint-text');
+            hintText.innerHTML = hint; // Use innerHTML to support links
+            hintBox.style.display = 'block';
+        }
+
+        // Close the hint box
+        function closeHintBox() {
+            const hintBox = document.getElementById('hint-box');
+            hintBox.style.display = 'none';
+        }
+
+        // Start the countdown when the page loads
+        window.onload = startCountdown;
+        let hintClickCount = 0;
+
+function trackHintClick() {
+    hintClickCount++;
+    if (hintClickCount > 3) {
+        document.getElementById("hint-4").style.display = "block";
+    }
+}
+
+function goToSecretGame() {
+        window.location.href = "secret.html"; // เปลี่ยนเป็นหน้าที่ต้องการ
+    }
+
+function closeHint4() {
+    document.getElementById("hint-4").style.display = "none";
+}
+
+// เพิ่ม event ให้ Hint 1 และ Hint 3
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".hint-buttons button:nth-child(1)").addEventListener("click", trackHintClick);
+    document.querySelector(".hint-buttons button:nth-child(3)").addEventListener("click", trackHintClick);
+});
+document.addEventListener("DOMContentLoaded", function () {
+    let audio = document.getElementById("bg-music");
+    let musicButton = document.getElementById("music-toggle");
+
+    musicButton.addEventListener("click", function () {
+        if (audio.paused) {
+            audio.play();
+            musicButton.textContent = "🔇 Mute Music";
+        } else {
+            audio.pause();
+            musicButton.textContent = "🔊 Play Music";
+        }
+    });
+});
+
+
+    </script>
+</body>
+</html>
